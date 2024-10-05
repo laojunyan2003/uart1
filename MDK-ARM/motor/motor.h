@@ -36,16 +36,26 @@ extern float MotorSpeed1;
 extern float MotorSpeed2;
 extern float MotorSpeed3;
 extern float MotorSpeed4;
-typedef struct _Motor
-{
-    int32_t lastCount;   
-    int32_t totalCount;  
-    int16_t overflowNum; 
-    float speed;         
-    uint8_t direct;  
-	  float MotorSpeed;
-}Motor;
-void Motor_Init(void);
-void MotorControll(int spd1,int spd2,int spd3,int spd4);
 
+
+typedef struct 
+{
+	float target_val;//目标值
+	float actual_val;//实际值
+	float err;//当前偏差
+	float err_last;//上次偏差
+	float err_sum;//误差累计值
+	float Kp,Ki,Kd;//比例，积分，微分系数
+	
+} tPid;
+
+
+void Motor_Init(void);
+void MotorControll(float spd1, float spd2, float spd3, float spd4);
+void MotorSet(float Spd1,float Spd2,float Spd3,float Spd4);
+
+float P_realize(tPid * pid,float actual_val);
+void PID_init(void);
+float PI_realize(tPid * pid,float actual_val);
+float PID_realize(tPid * pid,float actual_val);
 #endif

@@ -112,6 +112,8 @@ int main(void)
 	HAL_UART_Receive_IT(&huart3, &USART3Byte, 1);//????????
 	HAL_UART_Receive_IT(&huart5, &USART5Byte, 1);//???????
 	Motor_Init();
+			MotorSet(-65,-80,-50,-50);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -121,7 +123,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		MotorControll(-65,-80,-50,-50);
 		if(USART2_RX_STA&0x8000)
 		{
 		//	printf("Yaw Angle: %.2f \r\n", yaw_angle);
