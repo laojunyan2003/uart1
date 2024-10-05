@@ -19,7 +19,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "dma.h"
+#include "can.h"
+#include "i2c.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -27,6 +28,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "callback.h"
+#include "motor.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -89,37 +92,52 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_TIM2_Init();
+  MX_TIM3_Init();
+  MX_TIM4_Init();
+  MX_TIM5_Init();
+  MX_TIM8_Init();
+  MX_TIM7_Init();
+  MX_CAN_Init();
+  MX_I2C2_Init();
+  MX_TIM6_Init();
+  MX_UART5_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
 /* ????while(1)?? */
 	HAL_UART_Receive_IT(&huart1, &Data, 1);//????????
 	HAL_UART_Receive_IT(&huart2, &USART2Byte, 1);//????????
+	HAL_UART_Receive_IT(&huart3, &USART3Byte, 1);//????????
+	HAL_UART_Receive_IT(&huart5, &USART5Byte, 1);//???????
+	Motor_Init();
   /* USER CODE END 2 */
-HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-	uint32_t enc1 = (uint32_t)(__HAL_TIM_GET_COUNTER(&htim2));//???????
-	_Bool	DirectionA = __HAL_TIM_IS_TIM_COUNTING_DOWN(&htim2);
-
-	printf("encode: %d %d\r\n", enc1,DirectionA);
-
 
     /* USER CODE BEGIN 3 */
+		MotorControll(-65,-80,-50,-50);
 		if(USART2_RX_STA&0x8000)
 		{
 		//	printf("Yaw Angle: %.2f \r\n", yaw_angle);
 			USART2_RX_STA=0;
 		}	
-		HAL_Delay(100);
+		if(TIME7_STA==1){
+			printf("speed1: %f  \r\n",Speed2);
+			TIME7_STA=0;
+			//cal speed & motor here with timer controll every 10sconeds
+		}
+		if(TIME6_STA==1){
+			TIME6_STA=0;
+		}
+		HAL_Delay(1000);
   }
+	
   /* USER CODE END 3 */
 }
 

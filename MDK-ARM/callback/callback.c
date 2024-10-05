@@ -3,13 +3,23 @@
 #include "usart.h"
 #include "gpio.h"
 #include "callback.h"
-uint16_t USART2_RX_STA=0; 
+#include "tim.h"
+
 uint8_t  USART2_RX_BUF[USART2_REC_LEN];
 float yaw_angle;
 uint8_t  USART2Byte;
+uint8_t  USART3Byte;
+uint8_t  USART5Byte;
+
 char Buff[255];//????
 uint8_t Data;	//????
 int Cnt = 0;	//??
+
+volatile uint8_t TIME7_STA=0;
+volatile uint8_t TIME6_STA=0;
+volatile uint16_t USART2_RX_STA=0; 
+volatile uint16_t USART3_RX_STA=0; 
+volatile uint16_t USART5_RX_STA=0; 
 
 char RxBuffer[RXBUFFERSIZE]; 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
@@ -60,4 +70,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		}
 		HAL_UART_Receive_IT(&huart2,&USART2Byte,1);
 	}
+	else if (huart == &huart3){USART3_RX_STA=1;}
+	else if (huart == &huart5){USART5_RX_STA=1;}
 }
+
+
